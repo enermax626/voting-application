@@ -1,0 +1,15 @@
+spring:
+  data:
+    mongodb:
+      host: ${MONGODB_HOST:localhost}
+      port: 27017
+      username: ${MONGODB_USERNAME:root}
+      password: ${MONGODB_PASSWORD:example}
+      database: voting
+      authentication-database: admin
+
+  #Default Kafka Configuration
+  kafka:
+    producer:
+      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+

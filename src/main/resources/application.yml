@@ -1,0 +1,44 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: voting-app
+
+  kafka:
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+
+
+messaging:
+  kafka:
+    topic:
+      result-topic: session-result
+
+springdoc:
+  api-docs:
+    enabled: true
+
+  swagger-ui:
+    enabled: true
+
+
+# default restTemplate configuration
+rest:
+  template:
+    connection:
+      timeout: 5000
+    read:
+      timeout: 5000
+  api:
+    user:
+      validate-user: https://user-info.herokuapp.com/users/{userId}
+    schedule:
+      calculate-result: http://localhost:${server.port}/v1/job/calculate-results
+
+server:
+  port: 8080
+
+
+

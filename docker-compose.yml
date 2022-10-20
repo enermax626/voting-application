@@ -1,0 +1,89 @@
+version: "3"
+
+services:
+
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: voting_app
+    ports:
+      - "8080:8080"
+    environment:
+      MONGODB_HOST: mongo
+      MONGODB_USERNAME: root
+      MONGODB_PASSWORD: example
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    networks:
+      - VOTING_APP_NETWORK
+    depends_on:
+      - zookeeper
+      - kafka
+      - control-center
+      - mongo
+      - mongo-express
+
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    networks:
+      - VOTING_APP_NETWORK
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_INTERNAL://broker:29092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - VOTING_APP_NETWORK
+
+  control-center:
+    image: confluentinc/cp-enterprise-control-center:6.0.1
+    hostname: control-center
+    depends_on:
+      - kafka
+    ports:
+      - "9021:9021"
+    environment:
+      CONTROL_CENTER_BOOTSTRAP_SERVERS: 'kafka:9092'
+      CONTROL_CENTER_REPLICATION_FACTOR: 1
+      CONTROL_CENTER_CONNECT_CLUSTER: http://app-connect:8083
+      PORT: 9021
+    networks:
+      - VOTING_APP_NETWORK
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    ports:
+      - 27017:27017
+    networks:
+      - VOTING_APP_NETWORK
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+    networks:
+      - VOTING_APP_NETWORK
+
+networks:
+  VOTING_APP_NETWORK:
+    driver: "bridge"
