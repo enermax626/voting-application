@@ -1,0 +1,138 @@
+{
+	"info": {
+		"_postman_id": "b67707eb-547a-4a41-8c24-e19a5c8b9af8",
+		"name": "voting-app",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21330732"
+	},
+	"item": [
+		{
+			"name": "create-topic",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"First Topic\",\n    \"description\": \"my beautiful topic\"\n\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/v1/topic",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"topic"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create-session",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"description\": \"first long Session\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/v1/topic/{topicId}/session",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"topic",
+						"{topicId}",
+						"session"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "vote",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_id\": \"{userCPF}\",\n    \"vote\": \"YES\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/v1/topic/{topicId}/vote",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"topic",
+						"{topicId}",
+						"vote"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "calculate-results",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/v1/job/calculate-results",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"job",
+						"calculate-results"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get-topic-info",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/v1/topic/{topicId}",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"topic",
+						"{topicId}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
